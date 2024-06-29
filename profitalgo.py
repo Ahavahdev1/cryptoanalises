@@ -1,7 +1,7 @@
 import requests
 import pandas as pd
 import numpy as np
-import datetime
+import matplotlib.pyplot as plt
 from tkinter import *
 from tkinter import ttk
 
@@ -34,11 +34,10 @@ def show_graph(df):
     try:
         import matplotlib
         matplotlib.use("TkAgg")
-        import matplotlib.pyplot as plt
         from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
         root = Tk()
-        root.title("Crypto Price Chart")
+        root.title("Crypto Price Chart by Ahavahdev")
 
         # Criar a figura
         fig, ax = plt.subplots(figsize=(10, 6))
@@ -48,7 +47,7 @@ def show_graph(df):
         ax.plot(df.index, df['SMA_14'], label='SMA 14', linestyle='--')
 
         # Personalizar o gráfico
-        ax.set_title('Crypto Price and SMA')
+        ax.set_title('Crypto Price and SMA by Ahavahdev')
         ax.set_xlabel('Date')
         ax.set_ylabel('Price (USD)')
         ax.legend()
@@ -85,41 +84,6 @@ else:
     # Sinais combinados
     data['Signal'] = data['Buy_Signal'] + data['Sell_Signal']
 
-    # Parâmetros iniciais para simulação
-    initial_capital = 10000
-    transaction_fee_percent = 0.1 / 100
-    balance = initial_capital
-    position_size = 0
-    entry_price = 0
-    cumulative_profit = 0
-    in_position = False
-
-    # Lista para armazenar saldo em cada dia
-    balance_list = []
-
-    # Iterar sobre cada linha de dados
-    for index, row in data.iterrows():
-        if row['Signal'] == 1 and not in_position:  # Sinal de compra
-            entry_price = row['price']
-            position_size = balance / entry_price
-            balance -= position_size * entry_price * (1 + transaction_fee_percent)
-            in_position = True
-        
-        elif row['Signal'] == -1 and in_position:  # Sinal de venda
-            exit_price = row['price']
-            trade_profit = (exit_price - entry_price) * position_size - (entry_price * position_size * transaction_fee_percent) - (exit_price * position_size * transaction_fee_percent)
-            balance += position_size * exit_price * (1 - transaction_fee_percent)
-            cumulative_profit += trade_profit
-            in_position = False
-        
-        # Adicionar o saldo atual à lista
-        balance_list.append(balance)
-
-    # Adicionar a coluna de saldo ao DataFrame
-    data['Balance'] = balance_list
-
-    # Exibir os dados processados
-    print(data)
-
     # Mostrar o gráfico
     show_graph(data)
+
